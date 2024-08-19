@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>NEXUS</title>
+    <link rel="stylesheet" href="/static/style.css" />
+    <link rel="manifest" href="/static/manifest.json" />
+    <script src="/static/htmx.js"></script>
+    <script src="/static/jquery.min.js"></script>
+    <script src="/static/index.js"></script>
+</head>
+
+<body>
+    <main>
+        <aside>
+            <img src="/static/assets/logo.webp" alt="logo" class="logo" />
+
+            {{ range .Drives }}
+
+            <div class="drive" onclick="go_home()" hx-post="/setdir/{{.Path}}" hx-trigger="click" hx-swap="innerHTML"
+                hx-target="#holder">
+                {{ if eq .Name "Home" }}
+                <img src="/static/assets/icons/home.svg" alt="home" />
+                {{ end }}
+
+                {{ .Name }}
+            </div>
+
+            {{ end }}
+        </aside>
+
+        <div class="container">
+            <header>
+                <div class='back {{ if eq .Folder "/" }} disable {{ end }}' onclick="window.history.back();">
+                    <img src="/static/assets/icons/arrow-left.svg" alt="back" class="back-button" id="back-button" />
+                </div>
+
+                <div class="title">
+                    <h3>{{ .Path }}</h3>
+                </div>
+
+                <form action="/search" method="get">
+                    <input type="text" name="item" id="item" placeholder="Search" />
+                </form>
+            </header>
+
+            <div class="loader" hx-get="/grid{{ .Folder }}" hx-trigger="load" hx-swap="innerHTML" hx-target="#holder">
+            </div>
+
+            <div id="holder"></div>
+        </div>
+
+        <div id="menu" class="menu">
+            <div id="menu-item" class="menu-item" onclick="new_folder()">
+                <p>New Folder</p>
+            </div>
+
+            <div id="menu-item" class="menu-item" onclick="index_drive()" name="index">
+                <p>Index Location</p>
+            </div>
+        </div>
+    </main>
+</body>
+
+</html>
