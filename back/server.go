@@ -77,7 +77,7 @@ func Run(port int, path string) {
 		// c.File(abs_path)
 	})
 
-	r.StaticFS("/previews", http.Dir(dir+string(os.PathSeparator)+"previews"))
+	r.StaticFS("/previews", http.Dir(dir+string(os.PathSeparator)+"assets/icons/previews"))
 
 	r.GET("/", folder)
 
