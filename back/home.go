@@ -279,7 +279,14 @@ func folder(c *gin.Context) {
 		return
 	}
 
+	userHome := "/home/" + os.Getenv("USER")
 	path := filepath.Clean(abs_dir + string(os.PathSeparator) + folder)
+
+	if path == userHome {
+		path = "home"
+	} else if strings.HasPrefix(path, userHome+"/") {
+		path = strings.TrimPrefix(path, userHome+"/")
+	}
 
 	if len(path) > 20 {
 		path = path[:20] + "..."
